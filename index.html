@@ -4,10 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Sessary — browse your Claude Code sessions</title>
-<meta name="description" content="A native macOS app that turns your local Claude Code session logs into a fast, searchable library — conversations, tool calls, diffs, and usage analytics. All offline." />
+<meta name="description" content="A native macOS app that turns your local Claude Code session logs into a fast, searchable library — conversations, tool calls, diffs, and usage analytics. Built for terminal users. All offline." />
 <meta property="og:title" content="Sessary — browse your Claude Code sessions" />
-<meta property="og:description" content="A native macOS app for browsing, inspecting, and searching your Claude Code sessions. All offline." />
+<meta property="og:description" content="Your terminal forgets every Claude Code session. Sessary doesn't. Browse, search, and analyze your sessions — all offline." />
 <meta property="og:type" content="website" />
+<link rel="icon" type="image/svg+xml" href="assets/sessary.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -54,7 +55,6 @@
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
-  /* Atmospheric backdrop: radial accent glow + faint grid */
   body::before {
     content: "";
     position: fixed;
@@ -90,7 +90,6 @@
     color: var(--accent);
   }
 
-  /* Header */
   header {
     position: sticky; top: 0; z-index: 10;
     backdrop-filter: blur(12px);
@@ -98,9 +97,10 @@
     border-bottom: 1px solid var(--border);
   }
   .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-  .brand { display: flex; align-items: baseline; gap: 10px; font-weight: 800; font-size: 19px; letter-spacing: -0.02em; }
-  .brand .dot { color: var(--accent); }
-  .brand small { font-family: var(--font-mono); font-weight: 500; font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+  .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; font-size: 19px; letter-spacing: -0.02em; }
+  .brand img { width: 30px; height: 30px; display: block; }
+  .brand .dot { color: var(--accent); margin-left: -3px; }
+  .brand small { font-family: var(--font-mono); font-weight: 500; font-size: 11px; color: var(--muted); letter-spacing: 0.04em; margin-left: 2px; }
   .nav-actions { display: flex; align-items: center; gap: 18px; }
   .nav-actions .link { font-family: var(--font-mono); font-size: 13px; color: var(--muted); transition: color 0.15s; }
   .nav-actions .link:hover { color: var(--text); }
@@ -123,12 +123,11 @@
   .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
   .btn svg { width: 16px; height: 16px; fill: currentColor; }
 
-  /* Hero */
   .hero { padding: 96px 0 40px; text-align: center; }
   .hero .eyebrow { animation: rise 0.6s ease both; }
   .hero h1 {
-    font-size: clamp(38px, 7vw, 72px); line-height: 1.02; letter-spacing: -0.035em;
-    font-weight: 800; margin: 20px auto 0; max-width: 15ch;
+    font-size: clamp(36px, 6.4vw, 66px); line-height: 1.05; letter-spacing: -0.035em;
+    font-weight: 800; margin: 20px auto 0; max-width: 18ch;
     animation: rise 0.6s ease 0.05s both;
   }
   .hero h1 .grad {
@@ -137,15 +136,14 @@
   }
   .hero p.sub {
     font-size: clamp(16px, 2.2vw, 20px); color: var(--muted);
-    max-width: 56ch; margin: 26px auto 0; animation: rise 0.6s ease 0.12s both;
+    max-width: 60ch; margin: 26px auto 0; animation: rise 0.6s ease 0.12s both;
   }
-  .cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 36px; animation: rise 0.6s ease 0.18s both; }
-  .cta .meta { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-top: 18px; animation: rise 0.6s ease 0.24s both; }
-  .cta .meta b { color: var(--text); font-weight: 500; }
+  .cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 38px; animation: rise 0.6s ease 0.18s both; }
+  .cta-meta { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-top: 34px; animation: rise 0.6s ease 0.24s both; }
+  .cta-meta b { color: var(--text); font-weight: 500; }
 
   @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
-  /* Showcase */
   .showcase { padding: 40px 0 30px; }
   .frame {
     border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
@@ -153,17 +151,17 @@
     animation: rise 0.7s ease 0.28s both;
   }
   .frame img { display: block; width: 100%; height: auto; }
+  .frame + .frame { margin-top: 22px; }
   .subshots { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 22px; }
-  .subshots .frame { animation: none; }
+  .subshots .frame { animation: none; margin-top: 0; }
+  .subshots + .frame { margin-top: 22px; }
   @media (max-width: 720px) { .subshots { grid-template-columns: 1fr; } }
 
-  /* Sections */
   section.block { padding: 76px 0; }
   .head { max-width: 60ch; margin-bottom: 44px; }
   .head h2 { font-size: clamp(26px, 4vw, 38px); letter-spacing: -0.03em; font-weight: 800; margin-top: 12px; }
   .head p { color: var(--muted); font-size: 17px; margin-top: 12px; }
 
-  /* Features */
   .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   @media (max-width: 860px) { .grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
@@ -176,7 +174,6 @@
   .card h3 { font-size: 18px; margin: 12px 0 8px; letter-spacing: -0.01em; }
   .card p { color: var(--muted); font-size: 14.5px; }
 
-  /* Privacy band */
   .band {
     border: 1px solid var(--border); border-radius: var(--radius);
     background: linear-gradient(180deg, var(--accent-soft), transparent);
@@ -188,7 +185,6 @@
   .band .row span { display: inline-flex; align-items: center; gap: 8px; }
   .band .row .k { color: var(--accent); }
 
-  /* Install */
   .install { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
   @media (max-width: 760px) { .install { grid-template-columns: 1fr; } }
   .term {
@@ -206,7 +202,6 @@
   .copy { margin-left: 10px; font-size: 11px; color: #6f7683; cursor: pointer; border: 1px solid rgba(255,255,255,0.14); border-radius: 6px; padding: 2px 8px; }
   .copy:hover { color: #fff; }
 
-  /* Footer */
   footer { border-top: 1px solid var(--border); padding: 40px 0; margin-top: 40px; }
   .foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
   .foot a:hover { color: var(--accent); }
@@ -216,7 +211,7 @@
 
 <header>
   <div class="wrap nav">
-    <div class="brand">Sessary<span class="dot">.</span> <small>for Claude Code</small></div>
+    <div class="brand"><img src="assets/sessary.svg" alt="Sessary logo" />Sessary<span class="dot">.</span> <small>for Claude Code</small></div>
     <div class="nav-actions">
       <a class="link" href="#features">Features</a>
       <a class="link" href="https://github.com/nortmas/sessary" target="_blank" rel="noopener">GitHub</a>
@@ -230,9 +225,9 @@
 
 <main>
   <section class="hero wrap">
-    <div class="eyebrow">Native macOS · Free</div>
-    <h1>Your Claude Code sessions, <span class="grad">finally browsable</span>.</h1>
-    <p class="sub">Sessary reads your local Claude Code session logs and turns them into a fast, searchable library — full conversations, tool calls, diffs, and usage analytics. Everything runs on your Mac.</p>
+    <div class="eyebrow">Native macOS · Free · For terminal users</div>
+    <h1>Your terminal forgets every Claude Code session. <span class="grad">Sessary doesn't.</span></h1>
+    <p class="sub">The desktop app shows your sessions — but if you run Claude Code in the terminal, they just pile up as JSONL logs you'll never open again. Sessary reads those logs and turns them into a fast, searchable library: full conversations, tool calls, diffs, and usage analytics. All on your Mac.</p>
     <div class="cta">
       <a class="btn btn-primary" href="https://github.com/nortmas/sessary/releases/latest/download/Sessary.dmg">
         <svg viewBox="0 0 24 24"><path d="M12 16l-5-5h3V4h4v7h3l-5 5zm-7 2h14v2H5v-2z"/></svg>
@@ -243,22 +238,23 @@
         View on GitHub
       </a>
     </div>
-    <p class="meta">macOS 10.12+ · <b>free</b> · one-click download · reads <b>~/.claude/projects</b></p>
+    <p class="cta-meta">macOS 10.12+ · <b>free</b> · one-click download · reads <b>~/.claude/projects</b></p>
   </section>
 
   <section class="showcase wrap">
-    <div class="frame"><img src="assets/screenshot-list.png" alt="Sessary session list — every Claude Code session across projects, searchable and sortable" /></div>
+    <div class="frame"><img src="assets/screenshot-list.png" alt="Sessary session list — every Claude Code session across projects, searchable, starred and tagged" /></div>
     <div class="subshots">
-      <div class="frame"><img src="assets/screenshot-viewer.png" alt="Conversation viewer with thinking blocks, tool calls and diffs" /></div>
-      <div class="frame"><img src="assets/screenshot-analytics.png" alt="Analytics dashboard — sessions, tokens, active time and per-project breakdowns" /></div>
+      <div class="frame"><img src="assets/screenshot-viewer.png" alt="Conversation viewer with thinking blocks, tool calls and sub-agents" /></div>
+      <div class="frame"><img src="assets/screenshot-files.png" alt="Changed files view with before/after diffs reconstructed from the log" /></div>
     </div>
+    <div class="frame"><img src="assets/screenshot-analytics.png" alt="Analytics dashboard — sessions, tokens, active time, models, tools and per-project breakdowns" /></div>
   </section>
 
   <section class="block wrap" id="features">
     <div class="head">
       <div class="eyebrow">What it does</div>
       <h2>Everything from your Claude Code logs, made legible.</h2>
-      <p>Claude Code stores every session as JSONL on disk. Sessary reads those files and gives them an interface.</p>
+      <p>Claude Code stores every session as JSONL on disk. Sessary reads those files and gives them an interface — no matter how you run it.</p>
     </div>
     <div class="grid">
       <div class="card">
@@ -274,7 +270,7 @@
       <div class="card">
         <div class="tag">analyze</div>
         <h3>Usage analytics</h3>
-        <p>Sessions, messages, tokens, active time, models, and per-project breakdowns. See where your Claude Code time goes.</p>
+        <p>Sessions, messages, tokens, active time, models, skills, and per-project breakdowns. See where your Claude Code time goes.</p>
       </div>
       <div class="card">
         <div class="tag">files</div>
@@ -344,14 +340,12 @@
 </footer>
 
 <script>
-  // Copy the first-launch command.
   var btn = document.getElementById('copyBtn');
   if (btn) btn.addEventListener('click', function () {
     navigator.clipboard.writeText(document.getElementById('cmd').textContent).then(function () {
       var t = btn.textContent; btn.textContent = 'copied'; setTimeout(function () { btn.textContent = t; }, 1400);
     });
   });
-  // Progressive enhancement: show the latest release tag in the footer (fails silently).
   fetch('https://api.github.com/repos/nortmas/sessary/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (d) { if (d && d.tag_name) document.getElementById('relLink').textContent = 'Releases · ' + d.tag_name; })

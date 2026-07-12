@@ -11,7 +11,7 @@
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet" />
 <style>
   :root {
     --bg: #161617;
@@ -29,7 +29,9 @@
     --maxw: 1100px;
     --font-sans: 'Hanken Grotesk', -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    --font-display: 'Orbitron', 'Hanken Grotesk', -apple-system, sans-serif;
     --shadow: 0 24px 60px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(0, 0, 0, 0.3);
+    --grid-line: color-mix(in srgb, var(--accent) 45%, transparent);
   }
   @media (prefers-color-scheme: light) {
     :root {
@@ -43,6 +45,7 @@
       --accent-strong: #2f4d78;
       --accent-soft: rgba(61, 95, 143, 0.1);
       --shadow: 0 24px 60px rgba(20, 30, 50, 0.16), 0 4px 16px rgba(20, 30, 50, 0.08);
+      --grid-line: color-mix(in srgb, var(--accent) 28%, transparent);
     }
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -65,19 +68,36 @@
       radial-gradient(50rem 40rem at 0% 10%, var(--accent-soft), transparent 65%);
     pointer-events: none;
   }
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -2;
+  /* Synthwave perspective grid receding to a central horizon (floor + faint ceiling). */
+  .retro-bg { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; perspective: 340px; }
+  .retro-bg .plane {
+    position: absolute; left: -80%; right: -80%; height: 62vh;
     background-image:
-      linear-gradient(to right, var(--border) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-    background-size: 64px 64px;
-    opacity: 0.18;
-    mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 70%);
-    -webkit-mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 70%);
-    pointer-events: none;
+      linear-gradient(var(--grid-line) 2px, transparent 2px),
+      linear-gradient(90deg, var(--grid-line) 2px, transparent 2px);
+    background-size: 62px 62px;
+    will-change: background-position;
+  }
+  .retro-bg .floor {
+    bottom: 0; transform: rotateX(70deg); transform-origin: 50% 100%;
+    animation: gridflow 6s linear infinite;
+    mask-image: linear-gradient(to top, #000 0%, rgba(0,0,0,0.55) 34%, transparent 82%);
+    -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0,0,0,0.55) 34%, transparent 82%);
+  }
+  .retro-bg .ceiling {
+    top: 0; height: 46vh; opacity: 0.4; transform: rotateX(-70deg); transform-origin: 50% 0%;
+    animation: gridflow-rev 8s linear infinite;
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 78%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 78%);
+  }
+  .retro-bg .horizon {
+    position: absolute; left: 0; right: 0; top: 40vh; height: 220px; transform: translateY(-50%);
+    background: radial-gradient(58% 100% at 50% 50%, var(--accent-soft), transparent 72%);
+  }
+  @keyframes gridflow { to { background-position: 0 62px; } }
+  @keyframes gridflow-rev { to { background-position: 0 -62px; } }
+  @media (prefers-reduced-motion: reduce) {
+    .retro-bg .floor, .retro-bg .ceiling { animation: none; }
   }
   a { color: inherit; text-decoration: none; }
   .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
@@ -125,8 +145,9 @@
   .hero { padding: 96px 0 40px; text-align: center; }
   .hero .eyebrow { animation: rise 0.6s ease both; }
   .hero h1 {
-    font-size: clamp(36px, 6.4vw, 66px); line-height: 1.05; letter-spacing: -0.035em;
-    font-weight: 800; margin: 20px auto 0; max-width: 18ch;
+    font-family: var(--font-display);
+    font-size: clamp(28px, 5.2vw, 54px); line-height: 1.18; letter-spacing: 0.005em;
+    font-weight: 800; margin: 22px auto 0; max-width: 20ch;
     animation: rise 0.6s ease 0.05s both;
   }
   .hero h1 .grad {
@@ -207,6 +228,12 @@
 </style>
 </head>
 <body>
+
+<div class="retro-bg" aria-hidden="true">
+  <div class="plane ceiling"></div>
+  <div class="plane floor"></div>
+  <div class="horizon"></div>
+</div>
 
 <header>
   <div class="wrap nav">

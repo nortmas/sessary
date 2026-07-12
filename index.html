@@ -176,7 +176,7 @@
   .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
   .btn svg { width: 16px; height: 16px; fill: currentColor; }
 
-  .hero { padding: 96px 0 40px; text-align: center; }
+  .hero { padding-top: 96px; padding-bottom: 40px; text-align: center; }
   .hero .eyebrow { animation: rise 0.6s ease both; }
   .hero h1 {
     font-family: var(--font-display);
@@ -198,7 +198,7 @@
 
   @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
-  .showcase { padding: 40px 0 30px; }
+  .showcase { padding-top: 40px; padding-bottom: 30px; }
   .frame {
     border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
     box-shadow: var(--shadow); background: var(--surface);
@@ -211,7 +211,7 @@
   .subshots + .frame { margin-top: 22px; }
   @media (max-width: 720px) { .subshots { grid-template-columns: 1fr; } }
 
-  section.block { padding: 76px 0; }
+  section.block { padding-top: 76px; padding-bottom: 76px; }
   .head { max-width: 60ch; margin-bottom: 44px; }
   .head h2 { font-size: clamp(26px, 4vw, 38px); letter-spacing: -0.03em; font-weight: 800; margin-top: 12px; }
   .head p { color: var(--muted); font-size: 17px; margin-top: 12px; }
@@ -238,6 +238,10 @@
   .band .row { display: flex; gap: 26px; justify-content: center; flex-wrap: wrap; margin-top: 26px; font-family: var(--font-mono); font-size: 13px; color: var(--text); }
   .band .row span { display: inline-flex; align-items: center; gap: 8px; }
   .band .row .k { color: var(--accent); }
+  @media (max-width: 560px) {
+    .hero { padding-top: 64px; }
+    .band { padding: 36px 22px; }
+  }
 
   .install { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
   @media (max-width: 760px) { .install { grid-template-columns: 1fr; } }
